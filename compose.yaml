@@ -1,0 +1,30 @@
+services:
+    app:
+        container_name: app
+        build:
+            context: .
+            target: runner
+        volumes:
+            # - .:/app
+            - /app/node_modules
+            - /app/.next
+        ports:
+            - '3000:3000'
+        environment:
+            - NODE_ENV=development
+            - DATABASE_URL=postgresql://prisma:prisma@postgres:5432/prisma?schema=public
+        depends_on:
+            - postgres
+    postgres:
+        container_name: postgres
+        image: postgres:latest
+        environment:
+            - POSTGRES_USER=prisma
+            - POSTGRES_PASSWORD=prisma
+            - POSTGRES_DB=prisma
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        ports:
+            - '5444:5432'
+volumes:
+    db_data:

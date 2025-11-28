@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "docker:build": "docker compose build --no-cache",
+    "docker:dev": "docker compose up",
+    "docker:down": "docker compose down -v",
     "build": "next build",
     "check": "next lint && tsc --noEmit",
     "db:generate": "prisma migrate dev",
@@ -18,7 +21,8 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "migrate-and-start-dev": "npx prisma migrate deploy && npm run start-dev"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
