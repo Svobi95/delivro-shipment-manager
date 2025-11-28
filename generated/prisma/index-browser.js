@@ -121,11 +121,27 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.PostScalarFieldEnum = {
+exports.Prisma.CompanyScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  name: 'name'
+};
+
+exports.Prisma.ShipmentScalarFieldEnum = {
+  id: 'id',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  trackingNumber: 'trackingNumber',
+  provider: 'provider',
+  mode: 'mode',
+  originCountry: 'originCountry',
+  destinationCountry: 'destinationCountry',
+  companyId: 'companyId'
+};
+
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  invoicedWeight: 'invoicedWeight',
+  invoicedPrice: 'invoicedPrice',
+  shipmentId: 'shipmentId'
 };
 
 exports.Prisma.SortOrder = {
@@ -137,10 +153,23 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
+exports.Provider = exports.$Enums.Provider = {
+  GLS: 'GLS',
+  DPD: 'DPD',
+  UPS: 'UPS',
+  PPL: 'PPL',
+  FedEx: 'FedEx'
+};
 
+exports.Mode = exports.$Enums.Mode = {
+  EXPORT: 'EXPORT',
+  IMPORT: 'IMPORT'
+};
 
 exports.Prisma.ModelName = {
-  Post: 'Post'
+  Company: 'Company',
+  Shipment: 'Shipment',
+  Invoice: 'Invoice'
 };
 
 /**

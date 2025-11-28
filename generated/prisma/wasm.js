@@ -93,11 +93,27 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.PostScalarFieldEnum = {
+exports.Prisma.CompanyScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  name: 'name'
+};
+
+exports.Prisma.ShipmentScalarFieldEnum = {
+  id: 'id',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  trackingNumber: 'trackingNumber',
+  provider: 'provider',
+  mode: 'mode',
+  originCountry: 'originCountry',
+  destinationCountry: 'destinationCountry',
+  companyId: 'companyId'
+};
+
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  invoicedWeight: 'invoicedWeight',
+  invoicedPrice: 'invoicedPrice',
+  shipmentId: 'shipmentId'
 };
 
 exports.Prisma.SortOrder = {
@@ -109,10 +125,23 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
+exports.Provider = exports.$Enums.Provider = {
+  GLS: 'GLS',
+  DPD: 'DPD',
+  UPS: 'UPS',
+  PPL: 'PPL',
+  FedEx: 'FedEx'
+};
 
+exports.Mode = exports.$Enums.Mode = {
+  EXPORT: 'EXPORT',
+  IMPORT: 'IMPORT'
+};
 
 exports.Prisma.ModelName = {
-  Post: 'Post'
+  Company: 'Company',
+  Shipment: 'Shipment',
+  Invoice: 'Invoice'
 };
 /**
  * Create the Client
@@ -125,7 +154,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Prace\\tests\\delivro-task\\delivro-shipment-dashboard\\generated\\prisma",
+      "value": "/app/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -134,7 +163,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "linux-musl-openssl-3.0.x",
         "native": true
       },
       {
@@ -143,7 +172,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Prace\\tests\\delivro-task\\delivro-shipment-dashboard\\prisma\\schema.prisma",
+    "sourceFilePath": "/app/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -157,6 +186,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -165,13 +195,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id        Int      @id @default(autoincrement())\n  name      String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([name])\n}\n",
-  "inlineSchemaHash": "66ee7435600b47bfe63025e89c7062dc0a309ae4b2a8ce9efa569e3420c5cadc",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// ------------------------------------------------------\n// Enums\n// ------------------------------------------------------\nenum Provider {\n  GLS\n  DPD\n  UPS\n  PPL\n  FedEx\n}\n\nenum Mode {\n  EXPORT\n  IMPORT\n}\n\n// ------------------------------------------------------\n// Models\n// ------------------------------------------------------\n\nmodel Company {\n  id        String     @id\n  name      String\n  shipments Shipment[]\n}\n\nmodel Shipment {\n  id                 String   @id\n  createdAt          DateTime\n  trackingNumber     String\n  provider           Provider\n  mode               Mode\n  originCountry      String\n  destinationCountry String\n\n  // Relations\n  companyId String\n  company   Company @relation(fields: [companyId], references: [id])\n\n  invoices Invoice[]\n}\n\nmodel Invoice {\n  id             String @id\n  invoicedWeight Float\n  invoicedPrice  Int\n\n  // Relations\n  shipmentId String\n  shipment   Shipment @relation(fields: [shipmentId], references: [id])\n}\n",
+  "inlineSchemaHash": "5a2597e8e454d8a25591634ee83b0efbe42aec9be1185e6eb2812f69709ebfc0",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Post\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Company\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shipments\",\"kind\":\"object\",\"type\":\"Shipment\",\"relationName\":\"CompanyToShipment\"}],\"dbName\":null},\"Shipment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"trackingNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"provider\",\"kind\":\"enum\",\"type\":\"Provider\"},{\"name\":\"mode\",\"kind\":\"enum\",\"type\":\"Mode\"},{\"name\":\"originCountry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"destinationCountry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToShipment\"},{\"name\":\"invoices\",\"kind\":\"object\",\"type\":\"Invoice\",\"relationName\":\"InvoiceToShipment\"}],\"dbName\":null},\"Invoice\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoicedWeight\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"invoicedPrice\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"shipmentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shipment\",\"kind\":\"object\",\"type\":\"Shipment\",\"relationName\":\"InvoiceToShipment\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),
