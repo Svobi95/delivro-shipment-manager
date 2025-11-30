@@ -6,6 +6,7 @@ import { Input } from "./catalyst/input";
 import { parseJson } from "../../utils/parseJson";
 import { api } from "../../trpc/react";
 import type { Invoice } from "../../types/zod-schemas";
+import { useRouter } from "next/navigation";
 
 interface UploadDialogProps {
   isOpen: boolean;
@@ -13,7 +14,7 @@ interface UploadDialogProps {
 }
 
 export default function UploadDialog({ isOpen, setIsOpen }: UploadDialogProps) {
-  const utils = api.useUtils();
+  const router = useRouter();
   const [parsedData, setParsedData] = useState<Invoice[] | null>(null);
 
   const mutation = api.invoice.upload.useMutation();
@@ -22,7 +23,7 @@ export default function UploadDialog({ isOpen, setIsOpen }: UploadDialogProps) {
     if (!parsedData) return;
 
     await mutation.mutateAsync(parsedData);
-    utils.invoice.invalidate();
+    router.refresh();
     setIsOpen(false);
   };
 
