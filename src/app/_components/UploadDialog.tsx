@@ -13,6 +13,7 @@ interface UploadDialogProps {
 }
 
 export default function UploadDialog({ isOpen, setIsOpen }: UploadDialogProps) {
+  const utils = api.useUtils();
   const [parsedData, setParsedData] = useState<Invoice[] | null>(null);
 
   const mutation = api.invoice.upload.useMutation();
@@ -21,7 +22,7 @@ export default function UploadDialog({ isOpen, setIsOpen }: UploadDialogProps) {
     if (!parsedData) return;
 
     await mutation.mutateAsync(parsedData);
-    api.useUtils().invoice.invalidate();
+    utils.invoice.invalidate();
     setIsOpen(false);
   };
 
