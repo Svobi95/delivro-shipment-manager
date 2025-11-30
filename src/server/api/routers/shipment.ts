@@ -1,13 +1,15 @@
+import z from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import type { Provider } from "../../../../generated/prisma";
 
 export const shipmentRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: publicProcedure.input(z.object({ provider: z.string().optional() }).optional()).query(async ({ ctx, input }) => {
     const shipments = await ctx.db.shipment.findMany({
-      orderBy: { createdAt: "desc" }
+      where: input?.provider ? { provider: input.provider as Provider } : {},
+      orderBy: { createdAt: "desc" },
+      include: { company: true, invoices: true }
     });
 
-    console.log(shipments);
-
-    return shipments ?? [];
+    return shipments;
   })
 });

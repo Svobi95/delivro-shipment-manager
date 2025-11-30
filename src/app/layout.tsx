@@ -18,7 +18,7 @@ const geist = Geist({
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable}`}>
+    <html lang="en" className={`${geist.variable} dark:bg-black dark:text-white`}>
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
