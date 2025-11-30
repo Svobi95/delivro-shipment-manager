@@ -21,6 +21,7 @@ export default function UploadDialog({ isOpen, setIsOpen }: UploadDialogProps) {
     if (!parsedData) return;
 
     await mutation.mutateAsync(parsedData);
+    api.useUtils().invoice.invalidate();
     setIsOpen(false);
   };
 
